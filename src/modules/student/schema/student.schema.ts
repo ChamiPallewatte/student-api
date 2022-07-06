@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseSchema } from 'src/core/repository/schema';
+import { BaseSchema } from 'src/core/repository/schema/base.schema';
 
 export type StudentDocument = StudentMongoSchema & Document;
 
