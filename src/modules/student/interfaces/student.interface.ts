@@ -1,4 +1,4 @@
-import { IBaseModel } from 'src/core/repository/model/base-model.interface';
+import { IBaseModel } from 'src/core/model/base-model.interface';
 
 export interface IStudent extends IBaseModel {
   name: string;

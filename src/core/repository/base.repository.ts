@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { Model, QueryOptions } from 'mongoose';
-import { IPagination, IPaginatedEntity } from '../pagination';
+import { IBaseModel } from '../model/base-model.interface';
+import { IPaginatedEntity, IPagination } from '../pagination';
 import { IBaseRepository, IRepositoryOption } from './interface';
-import { IBaseModel } from './model/base-model.interface';
 
 export abstract class BaseRepository<T extends IBaseModel>
   implements IBaseRepository<T>
@@ -12,6 +12,12 @@ export abstract class BaseRepository<T extends IBaseModel>
     this._model = schemaModel;
   }
 
+  /**
+   * Prepare query. This will help to get soft deleted documents as well
+   * @param query object
+   * @param withTrashed boolean
+   * @returns
+   */
   private prepareQuery(query: any, withTrashed = false) {
     if (query) {
       delete query.page;
@@ -21,25 +27,25 @@ export abstract class BaseRepository<T extends IBaseModel>
       query['deletedAt'] = null;
     }
     return query;
-  }
+  } // prepareQuery
 
   async getCount(query: any): Promise<number> {
     return await this._model.countDocuments(query);
-  }
+  } //getCount
 
   async getPageInfo<T>(query: any, page: IPagination): Promise<IPagination> {
     page = !page ? {} : page;
     page.totalCount = await this.getCount(query);
     page.totalPages = page.limit ? Math.ceil(page.totalCount / page.limit) : 1;
     return page;
-  }
+  } // IPagination
 
   async create(data: T): Promise<T> {
     if (!data.createdAt) {
       data['createdAt'] = new Date();
     }
     return await this._model.create<T>(data);
-  }
+  } // create
 
   async findById(id: string, options?: IRepositoryOption): Promise<T> {
     const projection = (options && options.projection) || {};
@@ -50,7 +56,7 @@ export abstract class BaseRepository<T extends IBaseModel>
       }
     }
     return await this._model.findById(id, projection, paramOptions);
-  }
+  } // findById
 
   async findOne(query?: any, options?: IRepositoryOption): Promise<T> {
     const projection = (options && options.projection) || {};
@@ -60,8 +66,9 @@ export abstract class BaseRepository<T extends IBaseModel>
         paramOptions.populate = options.relation;
       }
     }
+
     return await this._model.findOne(query, projection, paramOptions);
-  }
+  } // findOne
 
   async findAll(query?: any, options?: IRepositoryOption): Promise<T[]> {
     const projection = (options && options.projection) || {};
@@ -79,12 +86,12 @@ export abstract class BaseRepository<T extends IBaseModel>
       projection,
       paramOptions,
     );
-  }
+  } //findAll
 
   async findAllWithPaginate(
     query?: any,
-    options?: IRepositoryOption,
     page?: IPagination,
+    options?: IRepositoryOption,
   ): Promise<IPaginatedEntity<T>> {
     const projection = (options && options.projection) || {};
     const paramOptions: QueryOptions = {};
@@ -104,7 +111,7 @@ export abstract class BaseRepository<T extends IBaseModel>
     const docs = await this._model.find(finalQuery, projection, paramOptions);
     const pageInfo = await this.getPageInfo(finalQuery, page);
     return { data: docs, ...pageInfo };
-  }
+  } // findAllWithPaginate
 
   async deleteById(id: string): Promise<boolean> {
     const entity = await this._model.findById(id);
@@ -114,10 +121,10 @@ export abstract class BaseRepository<T extends IBaseModel>
     entity['deletedAt'] = new Date();
     const d = await entity.save();
     return d ? true : false;
-  }
+  } // deleteById
 
   async findByIdAndUpdate(id: string, data: any): Promise<T> {
     data.updatedAt = Date.now();
     return await this._model.findByIdAndUpdate(id, data, { new: true });
-  }
+  } // findOneAndUpdate
 }

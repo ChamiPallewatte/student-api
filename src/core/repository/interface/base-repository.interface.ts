@@ -10,10 +10,16 @@ export interface IBaseRepository<T> {
 
   findAll(query?: any, options?: IRepositoryOption): Promise<T[]>;
 
+  /**
+   * Find all with pagination
+   * @param query
+   * @param page
+   * @param options
+   */
   findAllWithPaginate(
     query?: any,
-    options?: IRepositoryOption,
     page?: IPagination,
+    options?: IRepositoryOption,
   ): Promise<IPaginatedEntity<T>>;
 
   deleteById(id: string): Promise<boolean>;
