@@ -11,7 +11,7 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ValidateObjectIdPipe } from 'src/core/filters/validate-object-id.pipe';
 import { TransformInterceptor } from 'src/core/interceptors/transform.interceptor';
 import { IPaginatedEntity, IPagination, Pager } from 'src/core/pagination';
@@ -22,6 +22,7 @@ import { CreateStatus } from '../interfaces/create-status.interface';
 import { IStudent } from '../interfaces/student.interface';
 import { StudentService } from '../services/student.service';
 
+@ApiTags('student')
 @Controller('student')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
