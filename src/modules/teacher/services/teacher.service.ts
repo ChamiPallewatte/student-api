@@ -1,4 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { BufferedFile } from 'src/core/minio/file.model';
+import { MinioClientService } from 'src/core/minio/minio-client.service';
 import { IPaginatedEntity, IPagination } from 'src/core/pagination';
 import { IRepositoryOption } from 'src/core/repository/interface';
 import { CreateTeacherDto } from '../dto/create-teacher.dto';
@@ -16,9 +18,15 @@ export class TeacherService {
   constructor(
     @Inject(`${TeacherRepositoryInterface}`)
     private readonly teacherRepository: ITeacherRepository,
+    private minioClientService: MinioClientService,
   ) {}
 
-  async create(createTeacherDto: CreateTeacherDto): Promise<CreateStatus> {
+  async create(
+    createTeacherDto: CreateTeacherDto,
+    image: BufferedFile,
+  ): Promise<CreateStatus> {
+    let uploaded_image = await this.minioClientService.upload(image);
+    createTeacherDto.imgURL = uploaded_image.url;
     let status: CreateStatus = {
       success: true,
       message: 'user created',

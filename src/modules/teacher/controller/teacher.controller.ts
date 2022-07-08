@@ -9,11 +9,14 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ValidateObjectIdPipe } from 'src/core/filters/validate-object-id.pipe';
 import { TransformInterceptor } from 'src/core/interceptors/transform.interceptor';
+import { BufferedFile } from 'src/core/minio/file.model';
 import { IPaginatedEntity, IPagination, Pager } from 'src/core/pagination';
 import { CreateTeacherDto } from '../dto/create-teacher.dto';
 import { TeacherFilterDto } from '../dto/filter-teacher.dto';
@@ -28,12 +31,15 @@ export class TeacherController {
   constructor(private readonly teacherService: TeacherService) {}
 
   @Post()
+  @UseInterceptors(FileInterceptor('image'))
   @ApiCreatedResponse({ description: 'Create teacher' })
   public async createTeacher(
     @Body() createTeacherDto: CreateTeacherDto,
+    @UploadedFile() image: BufferedFile,
   ): Promise<CreateStatus> {
     const result: CreateStatus = await this.teacherService.create(
       createTeacherDto,
+      image,
     );
     if (!result.success) {
       throw new HttpException(result.message, HttpStatus.BAD_REQUEST);

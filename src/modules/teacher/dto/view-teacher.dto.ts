@@ -7,6 +7,7 @@ export class viewTeacherDto extends Teacher {
       name: data.name,
       age: data.age,
       subject: data.subject,
+      imgURL: data.imgURL,
     };
   }
 }

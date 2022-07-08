@@ -9,4 +9,7 @@ export class CreateTeacherDto {
 
   @ApiProperty({ type: String, description: 'Teacher subject' })
   readonly subject: string;
+
+  @ApiProperty({ type: String, description: 'Teacher profileimage' })
+  imgURL: string;
 }
