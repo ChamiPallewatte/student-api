@@ -4,7 +4,7 @@ export interface ITeacher extends IBaseModel {
   name: string;
   age: number;
   subject: string;
-  imgURL: string;
+  image: string;
 }
 
 export interface ITeacherSchema extends Omit<ITeacher, 'id'> {}

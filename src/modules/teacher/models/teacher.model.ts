@@ -8,5 +8,5 @@ export class Teacher implements ITeacher {
   name: string;
   age: number;
   subject: string;
-  imgURL: string;
+  image: string;
 }

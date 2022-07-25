@@ -40,7 +40,7 @@ export class MinioClientService {
     const fileName: string = `${filename}`;
     const fileBuffer = file.buffer;
     const metaData = {
-      'Content-Type': 'image',
+      'Content-Type': file.mimetype,
       'X-Amz-Meta-Testing': 1234,
     };
     this.client.putObject(
@@ -58,7 +58,7 @@ export class MinioClientService {
     );
 
     return {
-      url: `${config.MINIO_ENDPOINT}:${config.MINIO_PORT}/${config.MINIO_BUCKET}/${filename}`,
+      url: `http://${config.MINIO_ENDPOINT}:${config.MINIO_PORT}/${config.MINIO_BUCKET}/${filename}`,
     };
   }
 

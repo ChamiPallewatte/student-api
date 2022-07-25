@@ -26,7 +26,7 @@ export class TeacherService {
     image: BufferedFile,
   ): Promise<CreateStatus> {
     let uploaded_image = await this.minioClientService.upload(image);
-    createTeacherDto.imgURL = uploaded_image.url;
+    createTeacherDto.image = uploaded_image.url;
     let status: CreateStatus = {
       success: true,
       message: 'user created',

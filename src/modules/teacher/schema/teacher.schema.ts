@@ -15,7 +15,7 @@ export class TeacherMongoSchema extends BaseSchema {
   subject: String;
 
   @Prop()
-  imgURL: String;
+  image: String;
 
   @Prop()
   sort: Boolean;
