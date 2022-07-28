@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ITeacher } from 'src/modules/teacher/interfaces/teacher.interface';
+import { Teacher } from 'src/modules/teacher/models/teacher.model';
 
 export class CreateStudentDto {
+  @ApiProperty({ type: [Teacher], required: true })
+  teacherArray: ITeacher[];
+
   @ApiProperty({ type: String, description: 'Student name' })
   readonly name: string;
 

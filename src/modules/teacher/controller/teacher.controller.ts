@@ -31,15 +31,15 @@ export class TeacherController {
   constructor(private readonly teacherService: TeacherService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('file'))
   @ApiCreatedResponse({ description: 'Create teacher' })
   public async createTeacher(
     @Body() createTeacherDto: CreateTeacherDto,
-    @UploadedFile() image: BufferedFile,
+    @UploadedFile() file: BufferedFile,
   ): Promise<CreateStatus> {
     const result: CreateStatus = await this.teacherService.create(
       createTeacherDto,
-      image,
+      file,
     );
     if (!result.success) {
       throw new HttpException(result.message, HttpStatus.BAD_REQUEST);

@@ -1,3 +1,4 @@
+import { Teacher } from 'src/modules/teacher/models/teacher.model';
 import { IStudent } from '../interfaces/student.interface';
 
 export class Student implements IStudent {
@@ -9,4 +10,5 @@ export class Student implements IStudent {
   mathsMarks: number;
   scienceMarks: number;
   englishMarks: number;
+  teacherArray: Teacher[];
 }

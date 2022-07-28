@@ -9,6 +9,7 @@ export class viewStudentDto extends Student {
       mathsMarks: data.mathsMarks,
       scienceMarks: data.scienceMarks,
       englishMarks: data.englishMarks,
+      teacherArray: data.teacherArray,
     };
   }
 }
